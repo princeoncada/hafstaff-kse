@@ -70,6 +70,8 @@
               assign quantity_rule_soldout = true
             endif
           -%}
+
+          {% if customer %}
           <button
             id="ProductSubmitButton-{{ section_id }}"
             type="submit"
@@ -96,6 +98,26 @@
           {%- if show_dynamic_checkout -%}
             {{ form | payment_button }}
           {%- endif -%}
+
+          {% else %}
+
+          <a
+            id="ProductSubmitButton-{{ section_id }}"
+            href="/account/login"
+            class="product-form__submit button button--full-width {% if show_dynamic_checkout %}button--secondary{% else %}button--primary{% endif %}"
+            {% if product.selected_or_first_available_variant.available == false
+                or quantity_rule_soldout
+                or product.selected_or_first_available_variant == null
+            %}
+                disabled
+            {% endif %}
+            >
+            <span>
+                Login to see prices
+            </span>
+          </a>
+
+        {% endif %}
         </div>
       {%- endform -%}
     </product-form>
